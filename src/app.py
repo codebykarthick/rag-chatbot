@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import streamlit as st
 
-from rag.coordinator import retreive_and_generate
+from rag.coordinator import retrieve_and_generate
 
 """TODO: Update all documentation, create a docker container for reproducibility and update README."""
 
@@ -43,7 +43,7 @@ if prompt := st.chat_input():
 if st.session_state.messages[-1]["role"] != "assistant" and prompt is not None:
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = retreive_and_generate(st.session_state.messages, prompt)
+            response = retrieve_and_generate(st.session_state.messages, prompt)
             placeholder = st.empty()
             full_response = ""
             for item in response:

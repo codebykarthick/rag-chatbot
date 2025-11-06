@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -5,12 +6,13 @@ from langchain_huggingface import HuggingFaceEmbeddings
 import os
 from typing import List
 
-# app.py already loaded in the config so no need to do it again
+load_dotenv()
+
 EMBEDDING_MODEL = os.environ["EMBEDDING_MODEL"]
 
 embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
 db = FAISS.load_local(
-    "../../Data/vector_store", embeddings, allow_dangerous_deserialization=True
+    "../Data/vector_store", embeddings, allow_dangerous_deserialization=True
 )
 
 

@@ -11,7 +11,7 @@ Project can be run locally with the following commands. Recommended to create a 
 pip3 install -r requirements.txt
 
 # Run the dashboard
-streamlit src/app.py
+streamlit run src/app.py
 ```
 
 Project also supports a docker container by building and running with the following commands.

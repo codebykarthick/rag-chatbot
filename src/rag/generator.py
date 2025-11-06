@@ -1,10 +1,13 @@
+from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
 
 import os
 
+load_dotenv()
+
 MODEL = os.environ["MODEL"]
-TEMP = int(os.environ["MODEL_TEMP"])
+TEMP = float(os.environ["MODEL_TEMP"])
 MAX_TOKENS = int(os.environ["MODEL_MAX_TOKENS"])
 
 

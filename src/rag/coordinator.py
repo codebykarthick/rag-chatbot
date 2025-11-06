@@ -1,9 +1,14 @@
 from typing import Any
 
-from generator import generate_response_from_conversation
-from retriever import retrieve_from_vector_store
+from rag.generator import generate_response_from_conversation
+from rag.retriever import retrieve_from_vector_store
 
-def retreive_and_generate(messages: Any, prompt: str) -> str:
+
+def escape_markdown(text: str) -> str:
+    return text.replace("$", "\\$")
+
+
+def retrieve_and_generate(messages: Any, prompt: str) -> str:
     """Iterate through our chat history to build up the context to retrieve relevant docs and 
     generate a summary with LLM.
 
@@ -41,5 +46,6 @@ def retreive_and_generate(messages: Any, prompt: str) -> str:
     output = generate_response_from_conversation(string_dialogue)
 
     print(f"Response from generator: \n{output}")
+    output = escape_markdown(output)
 
     return output
