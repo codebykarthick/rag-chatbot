@@ -3,8 +3,6 @@ import streamlit as st
 
 from rag.coordinator import retrieve_and_generate
 
-"""TODO: Update all documentation, create a docker container for reproducibility and update README."""
-
 
 # Load config
 load_dotenv()

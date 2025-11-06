@@ -44,12 +44,6 @@ def retrieve_and_generate(messages: Any, prompt: str) -> str:
         else:
             string_dialogue += "Assistant: " + dict_message["content"] + "\n\n"
 
-    """TODO: Think about using short memory instead of building the entire convo history
-    cause this is not efficient, although more accurate.
-    """
-
-    """TODO: Think about caching practices somewhere to make this efficient. Review bottlenecks.
-    """
     
     retrieved_text = "\n\n".join([doc.page_content for doc in documents])
     string_dialogue += "\nRelevant context from retrieved documents:\n" + retrieved_text + "\n\n"
