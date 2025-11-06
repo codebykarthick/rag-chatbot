@@ -43,12 +43,18 @@ if prompt := st.chat_input():
 if st.session_state.messages[-1]["role"] != "assistant" and prompt is not None:
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = retrieve_and_generate(st.session_state.messages, prompt)
-            placeholder = st.empty()
-            full_response = ""
-            for item in response:
-                full_response += item
+            try:
+                response = retrieve_and_generate(st.session_state.messages, prompt)
+                placeholder = st.empty()
+                full_response = ""
+                for item in response:
+                    full_response += item
+                    placeholder.markdown(full_response)
                 placeholder.markdown(full_response)
-            placeholder.markdown(full_response)
+            except Exception as e:
+                print(f"Error during retrieve_and_generate: {e}")
+                full_response = "Error occurred, try again later."
+                placeholder = st.empty()
+                placeholder.markdown(full_response)
     message = {"role": "assistant", "content": full_response}
     st.session_state.messages.append(message)

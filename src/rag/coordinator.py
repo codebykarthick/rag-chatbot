@@ -1,6 +1,10 @@
 from typing import Any
 
-from rag.generator import generate_response_from_conversation
+from rag.generator import ( 
+    generate_company_from_query, 
+    generate_search_terms_from_query, 
+    generate_response_from_conversation
+)
 from rag.retriever import retrieve_from_vector_store
 
 
@@ -20,8 +24,18 @@ def retrieve_and_generate(messages: Any, prompt: str) -> str:
         str: The response generated through the coordinated retrieval from vector stores 
         and generation by the LLM.
     """
+    # Try to figure out which companies need to be analysed from query
+    companies = generate_company_from_query(query=prompt)
+    print(f"We are focussing on: {companies}")
+
+    # Use the companies and query to figure out what exactly should be retrieved
+    queries = generate_search_terms_from_query(query=prompt, companies=companies)
+    print(f"On search terms: {queries}")
+
     # Send the prompt as a query to the retriever
-    documents = retrieve_from_vector_store(query=prompt)
+    documents = retrieve_from_vector_store(queries=queries)
+
+    print(f"Retrieved documents: {documents}")
 
     string_dialogue = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'. Generate answers based on context from past conversation and retrieved documents only."
     for dict_message in messages:
@@ -41,7 +55,7 @@ def retrieve_and_generate(messages: Any, prompt: str) -> str:
     string_dialogue += "\nRelevant context from retrieved documents:\n" + retrieved_text + "\n\n"
     string_dialogue += f"User: {prompt}\n\nAssistant:"
 
-    print(f"Prompt to generator: \n{string_dialogue}")
+    # print(f"Prompt to generator: \n{string_dialogue}")
 
     output = generate_response_from_conversation(string_dialogue)
 

@@ -1,3 +1,4 @@
+from tqdm import tqdm
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
@@ -16,15 +17,26 @@ db = FAISS.load_local(
 )
 
 
-def retrieve_from_vector_store(query: str, k: int = 3) -> List[Document]:
-    """Return the relevant document chunks for the given query based on
-    match with embeddings.
+def retrieve_from_vector_store(queries: List[str] | str, k: int = 5) -> List[Document]:
+    """Return relevant document chunks for one or more queries.
 
     Args:
-        query (str): The query posted by the user
-        k (int, optional): The number of closest chunks that we have to retrieve. Defaults to 3.
+        queries (List[str] | str): A single query string or a list of query strings.
+        k (int, optional): The number of closest chunks per query. Defaults to 10.
 
     Returns:
-        _type_: _description_
+        List[Document]: Combined list of retrieved document chunks across all queries.
     """
-    return db.similarity_search(query, k=k)
+    if isinstance(queries, str):
+        queries = [queries]
+
+    all_docs = []
+    for query in tqdm(queries, desc="Retrieving documents"):
+        try:
+            results = db.similarity_search(query, k=k)
+            all_docs.extend(results)
+        except Exception as e:
+            print(f"Error retrieving for query '{query}': {e}")
+            continue
+
+    return all_docs
