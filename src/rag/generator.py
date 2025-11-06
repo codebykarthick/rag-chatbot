@@ -25,6 +25,7 @@ def generate_company_from_query(query: str) -> List[str]:
         model=MODEL,
         temperature=0,  # make it deterministic for classification
         max_completion_tokens=MAX_TOKENS,
+        model_kwargs={"response_format": {"type": "text"}}
     )
 
     system_prompt = (
@@ -59,7 +60,7 @@ def generate_company_from_query(query: str) -> List[str]:
 
 
 def generate_response_from_conversation(conversation: str) -> str:
-    """Use Groq to run inference and return the response based on the conversation
+    """Use OpenAI API to run inference and return the response based on the conversation
     built by the coordinator.
 
     Args:
@@ -73,6 +74,7 @@ def generate_response_from_conversation(conversation: str) -> str:
         model=MODEL,
         temperature=TEMP,
         max_completion_tokens=MAX_TOKENS,
+        model_kwargs={"response_format": {"type": "text"}}
     )
     messages = [HumanMessage(content=conversation)]
     response = llm.invoke(messages)
@@ -107,12 +109,13 @@ def generate_search_terms_from_query(query: str, companies: List[str]) -> List[s
         model=MODEL,
         temperature=TEMP,
         max_completion_tokens=MAX_TOKENS,
+        model_kwargs={"response_format": {"type": "text"}},
     )
 
     joined_companies = ", ".join([c.capitalize() for c in companies])
     system_prompt = (
         f"You are a financial analyst assistant. The user is asking a question related to {joined_companies}. "
-        "Your task is to list 3–6 concise search terms that would help retrieve relevant data "
+        "Your task is to list 3-6 concise search terms that would help retrieve relevant data "
         "from annual reports (like revenue, profit, EBIT, or growth). Avoid explanations — just list terms, separated by commas. "
         "For example, output like: 'Tesla revenue 2023, Tesla profit 2023, Tesla EBIT margin'."
     )

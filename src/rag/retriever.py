@@ -17,7 +17,7 @@ db = FAISS.load_local(
 )
 
 
-def retrieve_from_vector_store(queries: List[str] | str, k: int = 5) -> List[Document]:
+def retrieve_from_vector_store(queries: List[str] | str, k: int = 3) -> List[Document]:
     """Return relevant document chunks for one or more queries.
 
     Args:
