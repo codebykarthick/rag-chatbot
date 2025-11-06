@@ -20,6 +20,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application files
 COPY . .
 
+# Precompute vectors during image build
+RUN python3 scripts/preprocess_docs.py
+
 # Expose Streamlit default port
 EXPOSE 8501
 
